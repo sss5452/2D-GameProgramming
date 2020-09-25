@@ -37,10 +37,9 @@
 	
 3. GameState 소개
 
-   ![diagram_final](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\diagram_final.png)
-=======
+   
+
  	 ![image-20200925182257282](C:\Users\82109\AppData\Roaming\Typora\typora-user-images\image-20200925182257282.png)
->>>>>>> 39e464e08feb9060d4010e732ae409ca20946fda
 
       - LogoState : 게임 실행 시 게임 메인 화면으로 넘어가기 전 나오는 로고 창
       -  MainState : 게임 메인 화면, 게임 플레이 와 랭킹으로 넘어 갈 수 있다.
