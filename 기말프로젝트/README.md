@@ -107,10 +107,10 @@
 
      5. 인게임 예시
 
-     ![인게임 예시](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\인게임 예시.png)
+     ![diagram_final](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\인게임 예시.png)
 
      
 
      6.개발일정
 
-![일정](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\일정.png)
+![diagram_final](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\일정.png)
