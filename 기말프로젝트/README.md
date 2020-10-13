@@ -39,7 +39,8 @@
 
    
 
- 	 ![image-20200925182257282](C:\Users\82109\AppData\Roaming\Typora\typora-user-images\image-20200925182257282.png)
+   ![diagram_final](https://user-images.githubusercontent.com/71081825/94271392-87f17f80-ff7c-11ea-89d0-f8bc7231bc2d.png)
+
 
       - LogoState : 게임 실행 시 게임 메인 화면으로 넘어가기 전 나오는 로고 창
       -  MainState : 게임 메인 화면, 게임 플레이 와 랭킹으로 넘어 갈 수 있다.
