@@ -107,10 +107,8 @@
 
      5. 인게임 예시
 
-     ![diagram_final](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\인게임 예시.png)
-
-     
+     ![인게임 예시](https://user-images.githubusercontent.com/71081825/95839248-c27d5980-0d7d-11eb-84cd-f8a5f24e9d04.png)
 
      6.개발일정
 
-![diagram_final](C:\Users\82109\Desktop\2D-GameProgramming\기말프로젝트\image\일정.png)
+![일정](https://user-images.githubusercontent.com/71081825/95839306-d4f79300-0d7d-11eb-988c-55561fd175c7.png)
