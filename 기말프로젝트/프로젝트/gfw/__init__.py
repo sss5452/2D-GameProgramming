@@ -1,9 +1,13 @@
-# version 2020-0921
+# version 2020-0927
 import time
 from pico2d import *
+import random
+import gfw.world
+import gfw.image
+import gfw.font
 
 running = True
-stack = None # scene을 담고있는 컨테이너
+stack = None
 frame_interval = 0.01
 delta_time = 0
 
@@ -16,16 +20,17 @@ def run(start_state):
     running = True
     stack = [start_state]
 
-    # canvas open
-    open_canvas(1200,800,sync=True)
-    # start state enter
+    w,h = 1200,800
+    if hasattr(start_state, 'canvas_width'): w = start_state.canvas_width
+    if hasattr(start_state, 'canvas_height'): h = start_state.canvas_height
+
+    open_canvas(w=w, h=h)
+
     start_state.enter()
 
-    # delta time
     global delta_time
     last_time = time.time()
     while running:
-        # frame rate 구하기
         # inter-frame (delta) time
         now = time.time()
         delta_time = now - last_time
@@ -43,6 +48,7 @@ def run(start_state):
         clear_canvas()
         stack[-1].draw()
         update_canvas()
+
         delay(frame_interval)
 
     while (len(stack) > 0):

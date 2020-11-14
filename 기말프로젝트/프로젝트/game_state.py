@@ -1,27 +1,30 @@
 import gfw
 from pico2d import *
 from gobj import *
-from player import player
-import pygame as pg
+from player import Player
 from platform import Platform
-import background
+from background import Background
 
-pg.init()
 
 def enter():
-    global grass, boy , p
+    gfw.world.init(['bg','p','grass','boy'])
+    #gfw.world.add(gfw.layer.bg , bg)
+    global grass, boy , p ,bg
+    bg = Background('/background.png')
     grass = Grass()
-    boy = player()
+    gfw.world.add(gfw.layer.grass, grass)
+    boy = Player()
+    gfw.world.add(gfw.layer.boy,boy)
     p = Platform()
-
+    #gfw.world.add(gfw.layer.p,p)
+    hide_cursor()
 def update():
-    boy.update()
-    boy.landing()
-
+    gfw.world.update()
 def draw():
-    grass.draw()
+    bg.draw()
     p.draw()
-    boy.draw()
+    gfw.world.draw()
+
 
 def handle_event(e):
     global boy

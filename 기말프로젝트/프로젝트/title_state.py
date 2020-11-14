@@ -2,7 +2,6 @@ import gfw
 from pico2d import *
 import game_state
 
-
 fidx = 0
 player_x = 0
 start_rad = 0
