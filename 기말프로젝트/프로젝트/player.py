@@ -2,7 +2,6 @@ import random
 from pico2d import *
 import gfw
 import gobj
-from platform import Platform
 import enum
 from setting import *
 import platform
@@ -10,6 +9,7 @@ import platform
 #프레임당 처리로 바꿔야한다.
 #프레임당 처리로 바꾸고 콜리션(바운딩박스)을 프레임당 충돌처리로 바꾸자
 #콜리션을 클래스로 만들고 여러개로 바꾸자
+potal = 1
 class State(enum.Enum):
     Idle = 0
     Move = 1
@@ -38,12 +38,11 @@ class Player():
     state = State.Idle
     #constructor
     def __init__(self, rand_pos=False):
-        global  potal
         self.pos = (0,0)
         self.pos_x =50
         self.pos_y =200
         self.attack_pos =(0,0)
-        self.time =0
+        self.time = 0
         self.target = None
         self.action = 3
         self.delta = 0, 0
@@ -61,6 +60,7 @@ class Player():
         self.landon =False
         self.shieldon = False
         self.shieldrad = 0
+        self.st = 1
         self.stage = ST1_PLATFORM_LIST
         # set Animation
         Player.image[State.Idle.name] = gfw.image.load(gobj.res('/frog_idle.png'))
@@ -112,8 +112,6 @@ class Player():
             self.pos_y = 80
             self.acc_y =0
             self.landon = True
-
-
         if self.acc_x < 0:
             self.fl = 'h'
             if self.pos_y < 81 and self.landon == True:              # 땅기준으로 바꿧는데 수정해야됨
@@ -131,21 +129,26 @@ class Player():
         self.pos = self.pos_x ,self.pos_y
 
 
-
     #새위치 = 이전위치 + 속도 * 시간(프레임타임)
     # 애니메이션 작동 이미지 8장
         self.time += gfw.delta_time
         frame = self.time *15
         self.fidx = int(frame)%5
 
-    def landing(self):
-        for (x,y) in ST1_PLATFORM_LIST:
-            if self.pos_y > y+25 and self.pos_y <y+32 and self.pos_x >x-48 and self.pos_x < x+48 and self.vel_y<0:
-                self.land_y = y
-                print(x,y)
-                return True
-            else:
-                return False
+    def get_bb(self):
+        hw = 16
+        hh = 16
+        x, y = self.pos
+        return x - hw, y - hh, x + hw, y + hh
+
+    # def landing(self):
+    #     for (x,y) in ST1_PLATFORM_LIST:
+    #         if self.pos_y > y+25 and self.pos_y <y+32 and self.pos_x >x-48 and self.pos_x < x+48 and self.vel_y<0:
+    #             self.land_y = y
+    #             print(x,y)
+    #             return True
+    #         else:
+    #             return False
     #def shield(self):
 
     def jump(self):
@@ -153,15 +156,12 @@ class Player():
         self.landon = False
          #self.vel.x = 20
     def updateDelta(self, ddx, ddy):
-
         self.delta = ddx,ddy
     def updateAction(self, dx, ddx):
         self.action = \
             0 if dx < 0 else \
             1 if dx > 0 else \
             2 if ddx > 0 else 3
-
-
     def handle_event(self, e):
         pair = (e.type, e.key)
         if pair in Player.KEY_MAP:
@@ -170,8 +170,6 @@ class Player():
             if e.type == SDL_KEYUP:
                     self.state = State.Idle
             self.delta = gobj.point_add(self.delta, self.KEY_MAP[pair])
-            #self.updateDelta(*Boy.KEY_MAP[pair])
-
         elif pair == Player.KEYDOWN_SPACE:
             self.jump()
             self.state = State.Jump
@@ -179,6 +177,7 @@ class Player():
             #self.shield()
             self.state = State.Attack
             self.stage = ST2_PLATFORM_LIST
+            self.st = 2
             self.shieldon = True
         elif e.type == SDL_MOUSEBUTTONDOWN:
             self.state = State.Attack
@@ -189,9 +188,4 @@ class Player():
         if e.type == SDL_MOUSEMOTION:
             self.target = (e.x ,get_canvas_height() - e.y - 1)
 
-        def get_bb(self):
-            hw = 20
-            hh = 40
-            x, y = self.pos
-            return x - hw, y - hh, x + hw, y + hh
 

@@ -1,41 +1,53 @@
 import gfw
+import random
 from pico2d import *
-from gobj import *
+import gobj
 from player import Player
-from platform import Platform
+import platform
 from background import Background
+import enemy
 
 
 def enter():
-    gfw.world.init(['bg','p','grass','boy'])
+    gfw.world.init(['bg','platform','grass','player','en'])
     #gfw.world.add(gfw.layer.bg , bg)
-    global grass, boy , p ,bg
+    global grass, player ,platform,bg ,count ,en
     bg = Background('/background.png')
-    grass = Grass()
+    grass = gobj.Grass()
     gfw.world.add(gfw.layer.grass, grass)
-    boy = Player()
-    gfw.world.add(gfw.layer.boy,boy)
-    p = Platform()
+
+    player = Player()
+    gfw.world.add(gfw.layer.player,player)
+    count = player.st
+
+    platform.init(count)
+    gfw.world.add(gfw.layer.platform,platform)
+
+    # en = enemy.Plant((500,250))
+    # gfw.world.add(gfw.layer.en,en)
+
+
     #gfw.world.add(gfw.layer.p,p)
     hide_cursor()
 def update():
+    global  player
+    platform.stage = player.st
     gfw.world.update()
+    platform.update()
 def draw():
     bg.draw()
-    p.draw()
     gfw.world.draw()
-
+    gobj.draw_collision_box()
 
 def handle_event(e):
-    global boy
+    global player, stage
     # prev_dx = boy.dx
     if e.type == SDL_QUIT:
         gfw.quit()
     elif e.type == SDL_KEYDOWN:
         if e.key == SDLK_ESCAPE:
             gfw.pop()
-
-    boy.handle_event(e)
+    player.handle_event(e)
     #Boy.handle_event(boy, e)
 
     # print(balls)
