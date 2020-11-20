@@ -3,37 +3,47 @@ import random
 from pico2d import *
 import gobj
 from player import Player
-import platform
+from platform import Platform, Grass
 from background import Background
 import enemy
+from setting import *
 
 
 def enter():
-    gfw.world.init(['bg','platform','grass','player','en'])
+    gfw.world.init(['bg','plat','player','grass','en','b'])
     #gfw.world.add(gfw.layer.bg , bg)
-    global grass, player ,platform,bg ,count ,en
+    global grass, player ,platform, bg ,count ,en ,plat
     bg = Background('/background.png')
-    grass = gobj.Grass()
+    grass = Grass()
     gfw.world.add(gfw.layer.grass, grass)
 
     player = Player()
     gfw.world.add(gfw.layer.player,player)
     count = player.st
 
-    platform.init(count)
-    gfw.world.add(gfw.layer.platform,platform)
+    for (x,y) in STAGE_LIST[count]:
+        plat =Platform(count,x,y)
+        gfw.world.add(gfw.layer.plat,plat)
 
-    # en = enemy.Plant((500,250))
-    # gfw.world.add(gfw.layer.en,en)
-
-
+    for x in ST1_MONSTER_PLANT:
+        en = enemy.Plant((x,400))
+        gfw.world.add(gfw.layer.en, en)
+    # for (x, y) in ST2_PLATFORM_LIST:
+    #     wall.draw(x, y)
     #gfw.world.add(gfw.layer.p,p)
     hide_cursor()
+def updateMap():
+    global count ,plat
+    count += 1
+    print(player.st)
+    gfw.world.clear_at(gfw.layer.plat)
+    for (x, y) in STAGE_LIST[count]:
+        plat = Platform(count, x, y)
+        gfw.world.add(gfw.layer.plat, plat)
+
 def update():
-    global  player
-    platform.stage = player.st
+    global player, count
     gfw.world.update()
-    platform.update()
 def draw():
     bg.draw()
     gfw.world.draw()
@@ -47,6 +57,8 @@ def handle_event(e):
     elif e.type == SDL_KEYDOWN:
         if e.key == SDLK_ESCAPE:
             gfw.pop()
+        # if e.key == SDLK_LSHIFT:
+        #     updateMap()
     player.handle_event(e)
     #Boy.handle_event(boy, e)
 

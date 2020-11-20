@@ -4,6 +4,7 @@ import gfw
 import gobj
 import enum
 from setting import *
+import bullet
 import platform
 
 #프레임당 처리로 바꿔야한다.
@@ -60,7 +61,7 @@ class Player():
         self.landon =False
         self.shieldon = False
         self.shieldrad = 0
-        self.st = 1
+        self.st = 0
         self.stage = ST1_PLATFORM_LIST
         # set Animation
         Player.image[State.Idle.name] = gfw.image.load(gobj.res('/frog_idle.png'))
@@ -71,8 +72,7 @@ class Player():
         Player.shield_image = gfw.image.load(gobj.res('/s225.png'))
         Player.target_image = gfw.image.load(gobj.res('/target.png'))
     #구현해야할것
-    #character state 적용
-    #bounding box
+    # 총알 구별
     def draw(self):
         sx = self.fidx * 32
         if self.state == State.Jump or self.state == State.Fall:
@@ -88,6 +88,7 @@ class Player():
             if self.shieldrad == 20:
                 self.shieldrad =0
     def update(self):
+        self.checkShiled()
         dx, dy = self.delta
         self.acc_y=  -PLAYER_GRAVITY
         self.acc_x = dx
@@ -134,10 +135,16 @@ class Player():
         self.time += gfw.delta_time
         frame = self.time *15
         self.fidx = int(frame)%5
+    def checkShiled(self):
+        if self.shieldon: return True
+        else: return False
 
     def get_bb(self):
         hw = 16
         hh = 16
+        if self.shieldon:
+            hw = 25
+            hh = 25
         x, y = self.pos
         return x - hw, y - hh, x + hw, y + hh
 
@@ -176,8 +183,8 @@ class Player():
         elif pair == Player.KEYDOWN_SHIFT:
             #self.shield()
             self.state = State.Attack
-            self.stage = ST2_PLATFORM_LIST
-            self.st = 2
+            #self.stage = ST2_PLATFORM_LIST
+            self.st +=1
             self.shieldon = True
         elif e.type == SDL_MOUSEBUTTONDOWN:
             self.state = State.Attack

@@ -35,7 +35,6 @@ class Background:
         x, y = point
         l, b, r, t = self.win_rect
         return x - l, y - b
-
     # def to_screen(self, point):
     #     hw, hh = self.cw // 2, self.ch // 2
     #     x, y = point
