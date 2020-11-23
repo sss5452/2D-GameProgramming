@@ -5,6 +5,7 @@ import gobj
 import enum
 from setting import *
 import bullet
+import enemy
 import platform
 
 #프레임당 처리로 바꿔야한다.
@@ -208,7 +209,12 @@ class Player():
     def fire_bullet(self,bullet_type):
         global p
         self.bullet_type = bullet_type
-        p = bullet.Player_bullet(bullet_type)
+        x, y = self.target
+        if self.pos_x > x:
+            dir = 'w'
+        else:
+            dir = 'h'
+        p = bullet.Player_bullet(bullet_type,dir)
         gfw.world.add(gfw.layer.p, p)
     def attack_count(self):
         global time

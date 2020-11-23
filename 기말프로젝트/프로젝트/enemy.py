@@ -8,6 +8,8 @@ import game_state
 import platform
 from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 import player
+type = 0
+dir = 'h'
 
 class Enemy:
     ACTIONS = ['Attack', 'Dead', 'Idle']
@@ -21,12 +23,17 @@ class Enemy:
         self.accY = 0
         self.plant = gfw.image.load('../res/plant_idle.png')
         self.tree = gfw.image.load('../res/tree_idle.png')
+
+        self.bomb_pig = gfw.image.load('../res/bomb_pig_idle.png')
+        self.bomb_pig_attack = gfw.image.load('../res/bomb_pig_attack.png')
+
         self.fl = random.choice(['h','w'])
         self.fidx = random.randint(0, 7)
         self.time = 0
         self.action = 'Idle'
         self.patrol_order = -1
         self.fire_count = 0
+        self.img_count = 0
         #self.build_behavior_tree()
         layer = list(gfw.world.objects_at(gfw.layer.player))
         self.player = layer[0]
@@ -39,7 +46,10 @@ class Enemy:
         layer_p = list(gfw.world.objects_at(gfw.layer.plat))     # 맵이 넘어갈때로 if문 걸었으면 좋겟다
         self.time += gfw.delta_time
         frame = self.time *15
-        self.fidx = int(frame) % 11
+        if self.type == 1:
+            self.fidx = int(frame) % 11
+        elif self.type ==3:
+            self.fidx = int(frame) % 5
         x,y = self.pos
 
         for i in range(len(layer_p)):           # 벽돌 충돌처리
@@ -60,11 +70,23 @@ class Enemy:
         elif self.type == 2:
             sx = self.fidx * 64
             self.tree.clip_composite_draw(2 + sx, 0, 64, 32, 0, self.fl, *self.pos, 64, 32)
+        elif self.type == 3:
+            if self.action == 'Attack':
+                sx = self.fidx * 26
+                self.bomb_pig_attack.clip_composite_draw(sx, 0, 26, 26, 0, self.fl, *self.pos, 52, 52)
+            else:
+                sx = self.fidx * 26
+                self.bomb_pig.clip_composite_draw(sx, 0, 26, 26, 0, self.fl, *self.pos, 52, 52)
     #def attack(self):
     def fire(self):
-        if self.fire_count % 100 == 0:
+        if self.fire_count  == 100:
             b = bullet.Enemy_bullet((self.pos),self.type,self.fl)
             gfw.world.add(gfw.layer.b,b)
+            #self.Action_Change()
+            self.fire_count = 0
+        elif self.fire_count > 0 and self.fire_count < 30:
+            self.action = 'Attack'
+        else: self.action = 'Idle'
         self.fire_count+=1
     def find_player(self):
         dist_sq = gobj.distance_sq(self.player.pos, self.pos)
@@ -78,10 +100,21 @@ class Enemy:
 
             if self.patrol_order >= 0:
                 self.patrol_order = -1
-                self.action = 'Attack'
+                #self.action = 'Attack'
     def remove(self):
         gfw.world.remove(self)
     def get_bb(self):
         x,y = self.pos
         return x - 20, y - 22, x + 14, y + 14
+    def Action_Change(self):
+        if self.img_count == 0:
+            self.action = 'Attack'
+        else:
+            self.action = 'Idle'
+            self.img_count = 0
+        self.img_count += gfw.delta_time
+        print(self.img_count,'0')
+
+
+
 

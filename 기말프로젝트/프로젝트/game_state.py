@@ -26,7 +26,7 @@ def enter():
         gfw.world.add(gfw.layer.plat,plat)
 
     for x in ST1_MONSTER_PLANT:
-        en = enemy.Enemy((x,400),1)
+        en = enemy.Enemy((x,400),3)
         gfw.world.add(gfw.layer.en, en)
 
     for x in ST1_MONSTER_TREE:
