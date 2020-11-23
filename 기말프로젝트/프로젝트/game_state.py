@@ -10,7 +10,7 @@ from setting import *
 
 
 def enter():
-    gfw.world.init(['bg','plat','player','grass','en','b'])
+    gfw.world.init(['bg','plat','player','grass','en','b','p'])
     #gfw.world.add(gfw.layer.bg , bg)
     global grass, player ,platform, bg ,count ,en ,plat
     bg = Background('/background.png')
@@ -26,7 +26,11 @@ def enter():
         gfw.world.add(gfw.layer.plat,plat)
 
     for x in ST1_MONSTER_PLANT:
-        en = enemy.Plant((x,400))
+        en = enemy.Enemy((x,400),1)
+        gfw.world.add(gfw.layer.en, en)
+
+    for x in ST1_MONSTER_TREE:
+        en = enemy.Enemy((x,400),2)
         gfw.world.add(gfw.layer.en, en)
     # for (x, y) in ST2_PLATFORM_LIST:
     #     wall.draw(x, y)
@@ -47,7 +51,7 @@ def update():
 def draw():
     bg.draw()
     gfw.world.draw()
-    gobj.draw_collision_box()
+    #gobj.draw_collision_box()
 
 def handle_event(e):
     global player, stage

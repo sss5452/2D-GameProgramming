@@ -11,6 +11,8 @@ import platform
 #프레임당 처리로 바꾸고 콜리션(바운딩박스)을 프레임당 충돌처리로 바꾸자
 #콜리션을 클래스로 만들고 여러개로 바꾸자
 potal = 1
+target = 0,0
+time = 0
 class State(enum.Enum):
     Idle = 0
     Move = 1
@@ -39,6 +41,7 @@ class Player():
     state = State.Idle
     #constructor
     def __init__(self, rand_pos=False):
+        global layer_p
         self.pos = (0,0)
         self.pos_x =50
         self.pos_y =200
@@ -88,6 +91,8 @@ class Player():
             if self.shieldrad == 20:
                 self.shieldrad =0
     def update(self):
+        if bullet.GET_COUNTER_ATTACK == True:
+            bullet.GET_COUNTER_ATTACK = self.attack_count()
         self.checkShiled()
         dx, dy = self.delta
         self.acc_y=  -PLAYER_GRAVITY
@@ -102,6 +107,8 @@ class Player():
                     self.state = State.Move
                 else:
                     self.state = State.Idle
+
+        #if gobj.collides_box(self, self.back):
 
         if self.pos_y > 70 and self.landon == False:
             if self.vel_y < 0:
@@ -129,7 +136,6 @@ class Player():
         self.pos_y += self.vel_y + self.acc_y * gfw.delta_time
         self.pos = self.pos_x ,self.pos_y
 
-
     #새위치 = 이전위치 + 속도 * 시간(프레임타임)
     # 애니메이션 작동 이미지 8장
         self.time += gfw.delta_time
@@ -141,12 +147,12 @@ class Player():
 
     def get_bb(self):
         hw = 16
-        hh = 16
+        hh = 12
         if self.shieldon:
             hw = 25
             hh = 25
         x, y = self.pos
-        return x - hw, y - hh, x + hw, y + hh
+        return x - hw, y - hh-6, x + hw, y + hh
 
     # def landing(self):
     #     for (x,y) in ST1_PLATFORM_LIST:
@@ -181,18 +187,34 @@ class Player():
             self.jump()
             self.state = State.Jump
         elif pair == Player.KEYDOWN_SHIFT:
-            #self.shield()
-            self.state = State.Attack
-            #self.stage = ST2_PLATFORM_LIST
             self.st +=1
             self.shieldon = True
+
         elif e.type == SDL_MOUSEBUTTONDOWN:
-            self.state = State.Attack
-            self.attack_pos = (e.x, e.y)
+            if bullet.GET_COUNTER_ATTACK == True:
+                self.state = State.Attack
+                self.attack_pos = (e.x, e.y)
+                global target ,time
+                target =(e.x ,get_canvas_height() - e.y - 1)
+                self.fire_bullet(bullet.GET_BULLET_TYPE)
+                bullet.GET_COUNTER_ATTACK = False
+                time = 0
             #self.shield()
         elif pair == Player.KEYDOWN_SHIFTOFF:
             self.shieldon = False
         if e.type == SDL_MOUSEMOTION:
             self.target = (e.x ,get_canvas_height() - e.y - 1)
 
-
+    def fire_bullet(self,bullet_type):
+        global p
+        self.bullet_type = bullet_type
+        p = bullet.Player_bullet(bullet_type)
+        gfw.world.add(gfw.layer.p, p)
+    def attack_count(self):
+        global time
+        time += gfw.delta_time
+        print(time)
+        if(time > 1):
+            time = 0
+            return False
+        else: return True
