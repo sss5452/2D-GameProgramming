@@ -112,3 +112,20 @@
      6.개발일정
 
 ![일정](https://user-images.githubusercontent.com/71081825/95839306-d4f79300-0d7d-11eb-988c-55561fd175c7.png)
+
+## 2차 발표 
+
+`게임 간단한 소개`
+
+  게임 반격왕은 적(몬스터)들의 공격을 쉴드로 막아낸 뒤 적들의 공격을 마우스 이벤트를 통해 반격하  여 제거하는 게임입니다.
+
+`진행 상황`
+![주차별 진행 상황](https://user-images.githubusercontent.com/71081825/99965331-1301c100-2dd8-11eb-8ae4-0b4d1ad425a3.PNG)
+
+`Git Commits`
+
+![깃 커밋](https://user-images.githubusercontent.com/71081825/99965255-f2396b80-2dd7-11eb-89e0-a0f1b4b97628.PNG)
+
+ `class 구성정보 및 주요 코드`
+![클래스 구성 정보 및 주요 코드](https://user-images.githubusercontent.com/71081825/99965389-24e36400-2dd8-11eb-804f-233bedcde2b4.PNG)
+
