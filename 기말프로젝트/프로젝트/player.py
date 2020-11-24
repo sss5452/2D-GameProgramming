@@ -14,6 +14,7 @@ import platform
 potal = 1
 target = 0,0
 time = 0
+MAX_LIFE = 5
 class State(enum.Enum):
     Idle = 0
     Move = 1
@@ -67,6 +68,11 @@ class Player():
         self.shieldrad = 0
         self.st = 0
         self.stage = ST1_PLATFORM_LIST
+        self.life = MAX_LIFE
+        global heart_red, heart_white
+        heart_red = gfw.image.load('../res/heart_red.png')
+        heart_white = gfw.image.load('../res/heart_white.png')
+
         # set Animation
         Player.image[State.Idle.name] = gfw.image.load(gobj.res('/frog_idle.png'))
         Player.image[State.Move.name] = gfw.image.load(gobj.res('/frog_move.png'))
@@ -91,6 +97,12 @@ class Player():
             self.shieldrad +=0.2
             if self.shieldrad == 20:
                 self.shieldrad =0
+
+        x, y = get_canvas_width() - 30, get_canvas_height() - 30
+        for i in range(MAX_LIFE):
+            heart = heart_red if i < self.life else heart_white
+            heart.draw(x, y)
+            x -= heart.w
     def update(self):
         if bullet.GET_COUNTER_ATTACK == True:
             bullet.GET_COUNTER_ATTACK = self.attack_count()
@@ -154,6 +166,9 @@ class Player():
             hh = 25
         x, y = self.pos
         return x - hw, y - hh-6, x + hw, y + hh
+    def decrease_life(self):
+        self.life -= 1
+        return self.life <= 0
 
     # def landing(self):
     #     for (x,y) in ST1_PLATFORM_LIST:

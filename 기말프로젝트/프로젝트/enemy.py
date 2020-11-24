@@ -4,12 +4,14 @@ import random
 import gobj
 from setting import *
 import bullet
+from collison_image import Collsion
 import game_state
 import platform
 from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 import player
 type = 0
 dir = 'h'
+DEAD = 0
 
 class Enemy:
     ACTIONS = ['Attack', 'Dead', 'Idle']
@@ -34,6 +36,9 @@ class Enemy:
         self.patrol_order = -1
         self.fire_count = 0
         self.img_count = 0
+
+        self.dead = 0
+        self.coll = 0
         #self.build_behavior_tree()
         layer = list(gfw.world.objects_at(gfw.layer.player))
         self.player = layer[0]
@@ -46,9 +51,9 @@ class Enemy:
         layer_p = list(gfw.world.objects_at(gfw.layer.plat))     # 맵이 넘어갈때로 if문 걸었으면 좋겟다
         self.time += gfw.delta_time
         frame = self.time *15
-        if self.type == 1:
+        if self.type == 1 or self.type == 2:
             self.fidx = int(frame) % 11
-        elif self.type ==3:
+        elif self.type == 3:
             self.fidx = int(frame) % 5
         x,y = self.pos
 
@@ -66,10 +71,11 @@ class Enemy:
     def draw(self):
         if self.type == 1:
             sx = self.fidx * 44
-            self.plant.clip_composite_draw(2+sx, 0, 44, 44, 0, self.fl, *self.pos, 44, 44)
+            self.plant.clip_composite_draw(2+sx, 0, 44, 42, 0, self.fl, *self.pos, 44, 42)
         elif self.type == 2:
             sx = self.fidx * 64
             self.tree.clip_composite_draw(2 + sx, 0, 64, 32, 0, self.fl, *self.pos, 64, 32)
+
         elif self.type == 3:
             if self.action == 'Attack':
                 sx = self.fidx * 26
@@ -102,10 +108,13 @@ class Enemy:
                 self.patrol_order = -1
                 #self.action = 'Attack'
     def remove(self):
+        obj_dead = Collsion(self.pos,self.type,self.fl)
+        gfw.world.add(gfw.layer.obj_dead, obj_dead)
         gfw.world.remove(self)
     def get_bb(self):
         x,y = self.pos
         return x - 20, y - 22, x + 14, y + 14
+
     def Action_Change(self):
         if self.img_count == 0:
             self.action = 'Attack'

@@ -5,14 +5,15 @@ import gobj
 from player import Player
 from platform import Platform, Grass
 from background import Background
+from collison_image import Collsion
 import enemy
 from setting import *
 
 
 def enter():
-    gfw.world.init(['bg','plat','player','grass','en','b','p'])
+    gfw.world.init(['bg','plat','obj_dead','player','grass','en','b','p'])
     #gfw.world.add(gfw.layer.bg , bg)
-    global grass, player ,platform, bg ,count ,en ,plat
+    global grass, player ,platform, bg ,count ,en ,plat, obj_dead
     bg = Background('/background.png')
     grass = Grass()
     gfw.world.add(gfw.layer.grass, grass)
@@ -20,7 +21,6 @@ def enter():
     player = Player()
     gfw.world.add(gfw.layer.player,player)
     count = player.st
-
     for (x,y) in STAGE_LIST[count]:
         plat =Platform(count,x,y)
         gfw.world.add(gfw.layer.plat,plat)
