@@ -20,7 +20,7 @@ class Enemy:
         global layer_p, b
         self.type = type
         self.pos = pos
-        self.mass = 10
+        self.mass = 18
         self.velY = 0
         self.accY = 0
         self.plant = gfw.image.load('../res/plant_idle.png')
@@ -36,9 +36,9 @@ class Enemy:
         self.patrol_order = -1
         self.fire_count = 0
         self.img_count = 0
-
-        self.dead = 0
-        self.coll = 0
+        self.landon = False
+        # self.dead = 0
+        # self.coll = 0
         #self.build_behavior_tree()
         layer = list(gfw.world.objects_at(gfw.layer.player))
         self.player = layer[0]
@@ -60,11 +60,15 @@ class Enemy:
         for i in range(len(layer_p)):           # 벽돌 충돌처리
             self.plat = layer_p[i]
             if gobj.collides_box(self, self.plat):
-                y += PLAYER_GRAVITY * self.mass
-
+                self.landon = True
         if gobj.collides_box(self, self.back):
-            y += PLAYER_GRAVITY * self.mass
-        y -= PLAYER_GRAVITY * self.mass
+            self.landon = True
+            a,b= self.back.pos
+            y = b +50
+
+
+        if self.landon == False:
+            y -= PLAYER_GRAVITY * self.mass
         self.pos =(x, y)
         self.find_player()
 
@@ -97,7 +101,8 @@ class Enemy:
     def find_player(self):
         dist_sq = gobj.distance_sq(self.player.pos, self.pos)
         if dist_sq < Enemy.CHASE_DISTANCE_SQ:
-            self.fire()
+            if self.landon:
+                self.fire()
             dir = gobj.direction(self.player.pos, self.pos)
             if dir == True:
                 self.fl = 'w'
@@ -113,8 +118,12 @@ class Enemy:
         gfw.world.remove(self)
     def get_bb(self):
         x,y = self.pos
-        return x - 20, y - 22, x + 14, y + 14
-
+        if self.type == 1:
+            return x - 20, y - 22, x + 14, y + 10
+        elif self.type == 2:
+            return x - 20, y - 20, x + 14, y + 12
+        elif self.type == 3:
+            return x - 20, y - 22, x + 14, y + 10
     def Action_Change(self):
         if self.img_count == 0:
             self.action = 'Attack'

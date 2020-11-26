@@ -15,6 +15,8 @@ class Player_bullet:
         global layer , en_layer
         en_layer = list(gfw.world.objects_at(gfw.layer.en))
         self.en = en_layer[0]
+        back = list(gfw.world.objects_at(gfw.layer.grass))
+        self.back = back[0]
 
         self.plant = gfw.image.load('../res/plant_bullet.png')
         self.tree = gfw.image.load('../res/tree_bullet.png')
@@ -40,7 +42,7 @@ class Player_bullet:
             x,y = self.Tree_bullet()
         elif self.type ==3:
             x,y = self.Bomb_bullet()
-        if x > get_canvas_width() or x< 0 or y > get_canvas_height() or y < 0:
+        if x > get_canvas_width() or x< 0 or y > get_canvas_height()+300 or y < 0:
             self.remove()
         global en_layer
 
@@ -49,10 +51,11 @@ class Player_bullet:
             if gobj.collides_box(self, self.en):
                 enemy.Enemy.remove(self.en)
                 self.remove()
-
+        if gobj.collides_box(self,self.back):
+            self.remove()
     def handle_event(self, e):
         if e.type == SDL_MOUSEBUTTONDOWN:
-            self.target = (e.x ,get_canvas_height() - e.y - 1)  #화면 밖 제거
+            self.target = (e.x ,get_canvas_height() - e.y - 1)
             x, y = self.target
             a,b = self.pos
             self.delta = x-a, y-b
@@ -67,7 +70,7 @@ class Player_bullet:
             self.sx += 52
             self.rad += 0.2
             self.bomb_pig.clip_composite_draw(self.sx, 0, 52, 52, self.rad, 'w', *self.pos, 104, 104)
-            if self.sx == 208: self.sx = 0
+            if self.sx == 156: self.sx = 0
 
     def plant_bullet(self):
         x,y = self.pos
@@ -105,6 +108,8 @@ class Player_bullet:
         else: return x - 4, y - 4, x + 4, y + 4
 
     def remove(self):
+        obj_dead = Collsion(self.pos,self.type,self.fl,True)
+        gfw.world.add(gfw.layer.obj_dead, obj_dead)
         gfw.world.remove(self)
 
 class Enemy_bullet:
@@ -151,7 +156,7 @@ class Enemy_bullet:
         if gobj.collides_box(self,self.back):
             self.coll_img()
             self.remove()
-        if x > get_canvas_width() or x< 0 or y > get_canvas_height() or y < 0: #화면 밖 제거
+        if x > get_canvas_width() or x< 0 or y > get_canvas_height()+300 or y < 0: #화면 밖 제거
             self.remove()
 
     def draw(self):
@@ -165,7 +170,7 @@ class Enemy_bullet:
             self.sx += 52
             self.rad += 0.2
             self.bomb_pig.clip_composite_draw(self.sx, 0, 52, 56, self.rad, self.fl, *self.pos, 104, 112)
-            if self.sx == 208: self.sx =0
+            if self.sx == 156: self.sx =0
 
     def get_bb(self):
         x,y = self.pos

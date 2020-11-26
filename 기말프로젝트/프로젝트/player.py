@@ -4,6 +4,7 @@ import gfw
 import gobj
 import enum
 from setting import *
+import game_state
 import bullet
 import enemy
 import platform
@@ -44,6 +45,11 @@ class Player():
     #constructor
     def __init__(self, rand_pos=False):
         global layer_p
+        layer_p = list(gfw.world.objects_at(gfw.layer.plat))
+        self.plat = layer_p
+        back = list(gfw.world.objects_at(gfw.layer.grass))
+        self.back = back[0]
+
         self.pos = (0,0)
         self.pos_x =50
         self.pos_y =200
@@ -110,16 +116,31 @@ class Player():
         dx, dy = self.delta
         self.acc_y=  -PLAYER_GRAVITY
         self.acc_x = dx
-        for (x,y) in self.stage:
-            if self.pos_y > y+25 and self.pos_y <y+32 and self.pos_x >x-48 and self.pos_x < x+48 and self.vel_y<0:
-                self.land_y = y
-                self.pos_y = self.land_y+36
-                self.acc_y = 0
-                self.landon = True
-                if self.acc_x != 0:
-                    self.state = State.Move
-                else:
-                    self.state = State.Idle
+        global layer_p
+        if self.vel_y <0:
+            layer_p = list(gfw.world.objects_at(gfw.layer.plat))
+            for i in range(len(layer_p)):           # 벽돌 충돌처리
+                self.plat = layer_p[i]
+                if gobj.plat_landing(self.pos, self.plat):
+                    self.acc_y = 0
+                    self.landon = True
+                    x, y = self.plat.pos
+                    self.pos_y = y +36
+                    if self.acc_x != 0:
+                        self.state = State.Move
+                    else:
+                        self.state = State.Idle
+
+        # for (x,y) in self.stage:
+        #     if self.pos_y > y+25 and self.pos_y <y+32 and self.pos_x >x-48 and self.pos_x < x+48 and self.vel_y<0:
+        #         self.land_y = y
+        #         self.pos_y = self.land_y+36
+        #         self.acc_y = 0
+        #         self.landon = True
+        #         if self.acc_x != 0:
+        #             self.state = State.Move
+        #         else:
+        #             self.state = State.Idle
 
         #if gobj.collides_box(self, self.back):
 
@@ -130,7 +151,7 @@ class Player():
                 self.state = State.Idle
 
         elif self.pos_y < 70:  # 땅
-            self.pos_y = 80
+            self.pos_y = 75
             self.acc_y =0
             self.landon = True
         if self.acc_x < 0:
@@ -195,7 +216,7 @@ class Player():
         pair = (e.type, e.key)
         if pair in Player.KEY_MAP:
             if e.type == SDL_KEYDOWN:
-                    self.state = State.Move
+                self.state = State.Move
             if e.type == SDL_KEYUP:
                     self.state = State.Idle
             self.delta = gobj.point_add(self.delta, self.KEY_MAP[pair])
@@ -220,7 +241,11 @@ class Player():
             self.shieldon = False
         if e.type == SDL_MOUSEMOTION:
             self.target = (e.x ,get_canvas_height() - e.y - 1)
-
+        if platform.POTALON == True:
+            if e.type == SDL_KEYDOWN:
+                if e.key == SDLK_w:
+                    game_state.updateMap()
+                    platform.POTALON = False
     def fire_bullet(self,bullet_type):
         global p
         self.bullet_type = bullet_type
@@ -231,6 +256,7 @@ class Player():
             dir = 'h'
         p = bullet.Player_bullet(bullet_type,dir)
         gfw.world.add(gfw.layer.p, p)
+        #game_state.load_wav(wav_attack)
     def attack_count(self):
         global time
         time += gfw.delta_time

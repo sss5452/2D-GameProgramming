@@ -25,6 +25,17 @@ def collides_box(a, b):
 	if ta < bb: return False
 	return True
 
+def plat_landing(a, b):
+	x,y= a
+	la = x - 16
+	ba = y - 12
+	ra = x + 16
+	(lb, bb, rb, tb) = b.get_bb()
+	if la+15 > rb: return False
+	if ra-15 < lb: return False
+	if ba < tb+ 10 and ba> tb-15:
+		return True
+
 def draw_collision_box():
 	for obj in gfw.world.all_objects():
 		if hasattr(obj, 'get_bb'):
