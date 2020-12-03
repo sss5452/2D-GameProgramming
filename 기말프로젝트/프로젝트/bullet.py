@@ -4,6 +4,7 @@ import gobj
 import player
 import random
 import enemy
+import game_state
 from collison_image import Collsion
 MOVE_PPS = 200
 
@@ -51,8 +52,14 @@ class Player_bullet:
             if gobj.collides_box(self, self.en):
                 enemy.Enemy.remove(self.en)
                 self.remove()
+                if self.type == 3:
+                    game_state.sound_wav(2)
+                else:
+                    game_state.sound_wav(3)
         if gobj.collides_box(self,self.back):
             self.remove()
+            if self.type == 3:
+                game_state.sound_wav(2)
     def handle_event(self, e):
         if e.type == SDL_MOUSEBUTTONDOWN:
             self.target = (e.x ,get_canvas_height() - e.y - 1)
@@ -150,12 +157,18 @@ class Enemy_bullet:
                 GET_BULLET_TYPE = self.type
                 GET_COUNTER_ATTACK = True
             else:                                       #플레이어 충돌
-                player.Player.decrease_life(self.target)
+                dead = player.Player.decrease_life(self.target)
+                if dead:
+                    game_state.endGame()
                 self.coll_img()
                 self.remove()
+                if self.type == 3:
+                    game_state.sound_wav(2)
         if gobj.collides_box(self,self.back):
             self.coll_img()
             self.remove()
+            if self.type == 3:
+                game_state.sound_wav(2)
         if x > get_canvas_width() or x< 0 or y > get_canvas_height()+300 or y < 0: #화면 밖 제거
             self.remove()
 

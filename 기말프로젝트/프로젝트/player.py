@@ -4,8 +4,8 @@ import gfw
 import gobj
 import enum
 from setting import *
-import game_state
 import bullet
+import game_state
 import enemy
 import platform
 
@@ -16,6 +16,7 @@ potal = 1
 target = 0,0
 time = 0
 MAX_LIFE = 5
+MAX_GAUGE = 120
 class State(enum.Enum):
     Idle = 0
     Move = 1
@@ -74,10 +75,14 @@ class Player():
         self.shieldrad = 0
         self.st = 0
         self.stage = ST1_PLATFORM_LIST
+        self.shield_gauge = MAX_GAUGE
         self.life = MAX_LIFE
-        global heart_red, heart_white
+        global heart_red, heart_white,shield_bar,shield_gauge
         heart_red = gfw.image.load('../res/heart_red.png')
         heart_white = gfw.image.load('../res/heart_white.png')
+        global shield_bar, shield_gauge
+        shield_bar = gfw.image.load('../res/shield_bar.png')
+        shield_gauge = gfw.image.load('../res/shield_gauge.png')
 
         # set Animation
         Player.image[State.Idle.name] = gfw.image.load(gobj.res('/frog_idle.png'))
@@ -109,10 +114,22 @@ class Player():
             heart = heart_red if i < self.life else heart_white
             heart.draw(x, y)
             x -= heart.w
+
+        shield_bar.draw(1100, 720)
+        shield_gauge.composite_draw(0, 'h', 1150 - (self.shield_gauge/2), 720, self.shield_gauge, 16)
     def update(self):
         if bullet.GET_COUNTER_ATTACK == True:
             bullet.GET_COUNTER_ATTACK = self.attack_count()
+
         self.checkShiled()
+        if self.checkShiled():
+            if self.shield_gauge <= 0:
+                pass
+            else:
+                self.shield_gauge -= 1
+        elif self.checkShiled() == False and self.shield_gauge != MAX_GAUGE:
+            self.shield_gauge +=0.5
+
         dx, dy = self.delta
         self.acc_y=  -PLAYER_GRAVITY
         self.acc_x = dx
@@ -176,7 +193,11 @@ class Player():
         frame = self.time *15
         self.fidx = int(frame)%5
     def checkShiled(self):
-        if self.shieldon: return True
+        if self.shield_gauge <= 0:
+            self.shieldon = False
+            return False
+        elif self.shieldon:
+            return True
         else: return False
 
     def get_bb(self):
@@ -188,6 +209,7 @@ class Player():
         x, y = self.pos
         return x - hw, y - hh-6, x + hw, y + hh
     def decrease_life(self):
+        game_state.sound_wav(4)
         self.life -= 1
         return self.life <= 0
 
@@ -224,7 +246,7 @@ class Player():
             self.jump()
             self.state = State.Jump
         elif pair == Player.KEYDOWN_SHIFT:
-            self.st +=1
+            game_state.sound_wav(5)
             self.shieldon = True
 
         elif e.type == SDL_MOUSEBUTTONDOWN:
@@ -256,7 +278,7 @@ class Player():
             dir = 'h'
         p = bullet.Player_bullet(bullet_type,dir)
         gfw.world.add(gfw.layer.p, p)
-        #game_state.load_wav(wav_attack)
+        game_state.sound_wav(1)
     def attack_count(self):
         global time
         time += gfw.delta_time

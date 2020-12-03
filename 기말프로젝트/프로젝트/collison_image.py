@@ -1,4 +1,4 @@
-from pico2d import *
+
 import gfw
 class Collsion:
     def __init__(self,pos, type, fl,bullet = None):
@@ -29,7 +29,7 @@ class Collsion:
         self.fidx = int(frame) % self.max
         self.max_count+=1
         if self.max_count == self.max:
-              gfw.world.remove(self)
+            gfw.world.remove(self)
     def draw(self):
         if self.type == 1:
             sx = self.fidx * 44

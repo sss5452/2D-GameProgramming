@@ -100,6 +100,7 @@ class Enemy:
         self.fire_count+=1
     def find_player(self):
         dist_sq = gobj.distance_sq(self.player.pos, self.pos)
+        if self.type ==3: Enemy.CHASE_DISTANCE_SQ = 700**2
         if dist_sq < Enemy.CHASE_DISTANCE_SQ:
             if self.landon:
                 self.fire()
@@ -108,10 +109,6 @@ class Enemy:
                 self.fl = 'w'
             else:
                 self.fl = 'h'
-
-            if self.patrol_order >= 0:
-                self.patrol_order = -1
-                #self.action = 'Attack'
     def remove(self):
         obj_dead = Collsion(self.pos,self.type,self.fl)
         gfw.world.add(gfw.layer.obj_dead, obj_dead)
