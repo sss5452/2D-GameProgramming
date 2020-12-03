@@ -1,6 +1,6 @@
 import gfw
 from pico2d import *
-import title_state
+import main_state
 
 fidx = 0
 player_x = 0
@@ -20,7 +20,7 @@ def handle_event(e):
     elif (e.type, e.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
         gfw.quit()
     elif (e.type, e.key) == (SDL_KEYDOWN, SDLK_SPACE):
-        gfw.push(title_state)
+        gfw.push(main_state)
 
 
 def exit():
@@ -33,5 +33,3 @@ def resume():
     pass
 
 
-if __name__ == '__main__':
-    gfw.run_main()

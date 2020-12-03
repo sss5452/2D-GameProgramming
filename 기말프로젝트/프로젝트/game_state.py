@@ -98,11 +98,11 @@ def update():
     score += gfw.delta_time
     gfw.world.update()
 def draw():
-    global shield_bar , shield_gauge,gameover_img
+    global shield_bar , shield_gauge,gameover_img ,font,score
     bg.draw()
     gfw.world.draw()
     score_pos = 30 , get_canvas_height() - 30
-    font.draw(*score_pos, 'TIME: %.1F' % score, (255, 255, 255))
+    # font.draw(*score_pos, 'TIME: %.1F' % score, (255, 255, 255))
     if gameover:
         center = get_canvas_width() // 2, get_canvas_height() * 2 // 3
         gameover_img.draw(*center)
@@ -123,14 +123,12 @@ def handle_event(e):
 
     # print(balls)
 def exit():
-    global music_bg, wav_attack,wav_bomb, wav_shield_sound, wav_bullet, wav_hit ,font
-    del music_bg
+    global music_bg, wav_attack,wav_bomb, wav_shield_sound, wav_bullet, wav_hit
     del wav_attack
     del wav_bomb
     del wav_shield_sound
     del wav_bullet
     del wav_hit
-    del font
 
 def pause():
     pass
@@ -140,5 +138,3 @@ def resume():
     pass
 
 
-if __name__ == '__main__':
-    gfw.run_main()
