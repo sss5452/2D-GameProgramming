@@ -1,10 +1,7 @@
 import gfw
 from pico2d import *
-from setting import *
 import gobj
-import game_state
-import player
-import random
+
 
 POTALON = False
 class Platform:

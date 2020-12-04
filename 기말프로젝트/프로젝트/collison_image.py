@@ -1,5 +1,6 @@
 
 import gfw
+import game_state
 class Collsion:
     def __init__(self,pos, type, fl,bullet = None):
         self.pos  = pos
@@ -43,6 +44,7 @@ class Collsion:
                 self.tree_bullet.composite_draw(sx, self.fl, *self.pos)
             else:
                 self.tree.clip_composite_draw(2 + sx, 0, 64, 32, 0, self.fl, *self.pos, 64, 32)
+
         elif self.type == 3:
             if self.bullet:
                 sx = self.fidx * 52

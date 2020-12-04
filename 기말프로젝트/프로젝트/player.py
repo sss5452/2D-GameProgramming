@@ -109,6 +109,7 @@ class Player():
             if self.shieldrad == 20:
                 self.shieldrad =0
 
+        global heart, heart_red, heart_white , sheild_bar, shield_gauge
         x, y = get_canvas_width() - 30, get_canvas_height() - 30
         for i in range(MAX_LIFE):
             heart = heart_red if i < self.life else heart_white
@@ -192,6 +193,7 @@ class Player():
         self.time += gfw.delta_time
         frame = self.time *15
         self.fidx = int(frame)%5
+
     def checkShiled(self):
         if self.shield_gauge <= 0:
             self.shieldon = False
@@ -208,6 +210,7 @@ class Player():
             hh = 25
         x, y = self.pos
         return x - hw, y - hh-6, x + hw, y + hh
+
     def decrease_life(self):
         game_state.sound_wav(4)
         self.life -= 1
@@ -227,13 +230,16 @@ class Player():
         self.vel_y = 10.5
         self.landon = False
          #self.vel.x = 20
+
     def updateDelta(self, ddx, ddy):
         self.delta = ddx,ddy
+
     def updateAction(self, dx, ddx):
         self.action = \
             0 if dx < 0 else \
             1 if dx > 0 else \
             2 if ddx > 0 else 3
+
     def handle_event(self, e):
         pair = (e.type, e.key)
         if pair in Player.KEY_MAP:
@@ -268,6 +274,7 @@ class Player():
                 if e.key == SDLK_w:
                     game_state.updateMap()
                     platform.POTALON = False
+
     def fire_bullet(self,bullet_type):
         global p
         self.bullet_type = bullet_type
@@ -279,10 +286,10 @@ class Player():
         p = bullet.Player_bullet(bullet_type,dir)
         gfw.world.add(gfw.layer.p, p)
         game_state.sound_wav(1)
+
     def attack_count(self):
         global time
         time += gfw.delta_time
-        print(time)
         if(time > 1):
             time = 0
             return False

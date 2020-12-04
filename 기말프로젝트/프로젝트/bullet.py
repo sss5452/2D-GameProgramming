@@ -51,6 +51,7 @@ class Player_bullet:
             self.en = en_layer[i]
             if gobj.collides_box(self, self.en):
                 enemy.Enemy.remove(self.en)
+                game_state.updateScore()
                 self.remove()
                 if self.type == 3:
                     game_state.sound_wav(2)
@@ -159,6 +160,7 @@ class Enemy_bullet:
             else:                                       #플레이어 충돌
                 dead = player.Player.decrease_life(self.target)
                 if dead:
+                    game_state.sound_wav(6)
                     game_state.endGame()
                 self.coll_img()
                 self.remove()
