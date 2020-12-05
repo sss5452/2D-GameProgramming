@@ -5,7 +5,7 @@ import gfw
 
 FILENAME = 'data.pickle'
 scores = []
-MAX_SCORE_COUNT = 5
+MAX_SCORE_COUNT = 10
 last_rank = -1
 
 class Entry:

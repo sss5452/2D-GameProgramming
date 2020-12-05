@@ -1,21 +1,22 @@
 import gfw
 from pico2d import *
 from player import Player
-from platform import Platform, Grass
-from background import Background
 import ranking_state
 import enemy
 from setting import *
 import highscore
 import random
+import platforms
+
 
 score = 0
 Soundon = False
-
+count = 0
 def deadmusicstop():
     global wav_die , Soundon
     del wav_die
     Soundon = False
+
 def endGame():
     global music_bg, gameover, score
     gameover = True
@@ -39,18 +40,22 @@ def sound_wav(type):
     elif type == 6:
         wav_die.play()
     Soundon = True
+
 def enter():
+    print("GameState Enter")
+
     #--------------------------------------------------------------------------#
-    gfw.world.init(['bg', 'plat', 'grass', 'obj_dead', 'en', 'player', 'b', 'p', 'ui']) #월드 init
-    global grass, player, platform, bg, count, en, plat, obj_dead
-    bg = Background('/background_grass.png')
-    grass = Grass()
+    gfw.world.init(['plat', 'grass', 'obj_dead', 'en', 'player', 'b', 'p', 'ui']) #월드 init
+    global grass, player, platform, bg, count, en, plat, obj_dead ,bg_last
+    bg = gfw.load_image('res/background_grass.png')
+    bg_last = gfw.load_image('res/background_wall.png')
+    grass = platforms.Grass()
     gfw.world.add(gfw.layer.grass, grass)
     player = Player()
     gfw.world.add(gfw.layer.player, player)
     count = 0
     for (x, y) in STAGE_LIST[count]:
-        plat = Platform(count, x, y)
+        plat = platforms.Platform(count, x, y)
         gfw.world.add(gfw.layer.plat, plat)
 
     for x in PLNAT_MONSTER_LIST[count]:
@@ -82,10 +87,9 @@ def enter():
     wav_shield_sound = load_wav('res/shield_sound.wav')
     music_bg = load_music('res/map.wav')
     #--------------------------------------------------------------------------#
-    global font ,score , score_pos
-    font = gfw.font.load('res/Pixel.ttf',38)
+    global font_a ,score
+    font_a = gfw.font.load('res/Pixel.ttf',38)
     score = 0
-    score_pos = 30 , get_canvas_height() - 30
     #--------------------------------------------------------------------------#
     highscore.load()
     music_bg.repeat_play()
@@ -95,7 +99,7 @@ def updateMap():
     count += 1
     gfw.world.clear_at(gfw.layer.plat)
     for (x, y) in STAGE_LIST[count]:
-        plat = Platform(count, x, y)
+        plat = platforms.Platform(count, x, y)
         gfw.world.add(gfw.layer.plat, plat)
     for x in PLNAT_MONSTER_LIST[count]:
         en = enemy.Enemy((x,400),1)
@@ -119,10 +123,14 @@ def update():
         return
     gfw.world.update()
 def draw():
-    global shield_bar , shield_gauge, gameover_img ,font, score ,score_pos,entershow
-    bg.draw()
+    global shield_bar , shield_gauge, gameover_img ,font_a, score ,score_pos,entershow ,bg, bg_last
+    if count ==4:
+        bg_last.draw(600,400)
+    else:
+        bg.draw(600,400)
     gfw.world.draw()
-    font.draw(*score_pos, 'SCORE: %.0F' % score, (255, 255, 255))
+    score_pos = 30 , get_canvas_height() - 30
+    font_a.draw(*score_pos, 'SCORE: %.0F' % score, (255, 255, 255))
     if gameover:
         center = get_canvas_width() // 2, get_canvas_height() * 2 // 3
         gameover_img.draw(*center)
@@ -139,13 +147,19 @@ def handle_event(e):
             gfw.pop()
         if e.key == SDLK_RETURN and gameover:
             gfw.world.clear()
-            gfw.push(ranking_state)
+            gfw.change(ranking_state)
     player.handle_event(e)
     #Boy.handle_event(boy, e)
 
     # print(balls)
 def exit():
-    global music_bg, wav_attack,wav_bomb, wav_shield_sound, wav_bullet,wav_hit1, wav_hit2, wav_hit3, wav_die
+    global gameover_img,entershow
+    del gameover_img,entershow
+
+    global font_a
+    del font_a
+
+    global music_bg, wav_attack,wav_bomb, wav_shield_sound, wav_bullet,wav_hit1, wav_hit2, wav_hit3
     del wav_attack
     del wav_bomb
     del wav_shield_sound
@@ -153,8 +167,7 @@ def exit():
     del wav_hit1
     del wav_hit2
     del wav_hit3
-    del wav_die
-
+    print('GameState Exit')
 def pause():
     pass
 

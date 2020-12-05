@@ -7,6 +7,7 @@ import highscore
 start_rad = 0
 rad_bool = True
 def enter():
+    print("RankingState Enter")
     global ButtonSound , BackSound
     BackSound = load_music('res/RankMusic.mp3')
     ButtonSound = load_wav('res/ButtonSound.wav')
@@ -69,10 +70,13 @@ def handle_event(e):
         elif x > 1000 - quit_game.w//2 and x< 1000+quit_game.w//2 and y >110 - quit_game.h//2 and y<110+quit_game.h//2:
             gfw.quit()
 def exit():
+    global ranking_back ,target ,back ,gotomain ,quit_game
+    del ranking_back ,target ,back ,gotomain ,quit_game
+
     global ButtonSound, BackSound
     del ButtonSound
     del BackSound
-
+    print('RankingState Exit')
 def pause():
     pass
 

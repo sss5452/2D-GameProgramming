@@ -1,14 +1,10 @@
-from pico2d import *
 import gfw
 import random
 import gobj
 from setting import *
 import bullet
 from collison_image import Collsion
-import game_state
-import platform
-from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
-import player
+
 type = 0
 dir = 'h'
 DEAD = 0

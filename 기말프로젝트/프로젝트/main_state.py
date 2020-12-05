@@ -10,6 +10,8 @@ rad_bool = True
 CheckGame = False
 
 def enter():
+    print("MainState Enter")
+
     global ButtonSound , BackSound
     BackSound = load_music('res/MainMusic.wav')
     ButtonSound = load_wav('res/ButtonSound.wav')
@@ -72,18 +74,22 @@ def handle_event(e):
         x, y = target_pos
         if x > 500 and x < 720 and y >390 and y < 410:
             CheckGame = True
-            gfw.push(game_state)
+            gfw.change(game_state)
         elif x > 500 and x < 720 and y >320 and y < 340:
             CheckGame = False
-            gfw.push(ranking_state)
+            gfw.change(ranking_state)
         elif x > 500 and x < 720 and y >250 and y < 270:
             gfw.quit()
 def exit():
-    # global image, wall , player ,fidx
-    # del image, wall , player ,fidx
+    global image, wall , player ,target, start,quit_game
+    del image, wall , player ,target, start,quit_game
+
     global ButtonSound,BackSound
     del ButtonSound
     del BackSound
+    print('MainState Exit')
+
+
 def pause():
     pass
 def resume():

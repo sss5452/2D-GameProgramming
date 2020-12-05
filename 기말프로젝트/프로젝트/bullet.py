@@ -113,7 +113,8 @@ class Player_bullet:
             x -=5
             y -=5
             return x - 10, y - 10, x + 10, y + 10
-        else: return x - 4, y - 4, x + 4, y + 4
+        else:
+            return x - 4, y - 4, x + 4, y + 4
 
     def remove(self):
         obj_dead = Collsion(self.pos,self.type,self.fl,True)
@@ -176,8 +177,7 @@ class Enemy_bullet:
 
     def draw(self):
         if self.type == 1:
-            if self:
-                self.plant.draw(*self.pos)
+            self.plant.draw(*self.pos)
         if self.type == 2:
             #self.tree.draw(*self.pos)
             self.rad +=0.2
@@ -185,8 +185,7 @@ class Enemy_bullet:
         if self.type == 3:
             self.sx += 52
             self.rad += 0.2
-            if self:
-                self.bomb_pig.clip_composite_draw(self.sx, 0, 52, 56, self.rad, self.fl, *self.pos, 104, 112)
+            self.bomb_pig.clip_composite_draw(self.sx, 0, 52, 56, self.rad, self.fl, *self.pos, 104, 112)
             if self.sx == 156: self.sx =0
 
     def get_bb(self):
@@ -195,7 +194,9 @@ class Enemy_bullet:
             x -=5
             y -=5
             return x - 10, y - 10, x + 10, y + 10
-        else:  return x - 4, y - 4, x + 4, y + 4
+        else:
+            return x - 4, y - 4, x + 4, y + 4
+
     def remove(self):
         gfw.world.remove(self)
 

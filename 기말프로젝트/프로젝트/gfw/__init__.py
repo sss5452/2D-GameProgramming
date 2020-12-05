@@ -76,17 +76,22 @@ def run(start_state):
 def change(state):
     global stack
     if (len(stack) > 0):
-        stack.pop().exit()
+        stack[-1].exit()
+        stack.pop()
+        #stack.pop().exit()
     stack.append(state)
     state.enter()
-
+    print(len(stack))
 def push(state):
     global stack
     if (len(stack) > 0):
+        print(len(stack))
         if stack[-1]:
             stack[-1].pause()
     stack.append(state)
+    print("append")
     state.enter()
+    print("enter")
 
 def pop():
     global stack

@@ -7,7 +7,7 @@ from setting import *
 import bullet
 import game_state
 import enemy
-import platform
+import platforms
 
 #프레임당 처리로 바꿔야한다.
 #프레임당 처리로 바꾸고 콜리션(바운딩박스)을 프레임당 충돌처리로 바꾸자
@@ -120,6 +120,10 @@ class Player():
         shield_bar.draw(1100, 720)
         shield_gauge.composite_draw(0, 'h', 1150 - (self.shield_gauge/2), 720, self.shield_gauge, 16)
     def update(self):
+        if self.pos_x < -5:
+            self.pos_x = 1190
+        if self.pos_x > 1205:
+            self.pos_x = 5
         if self.landon:
             self.jump_count = 0
         if bullet.GET_COUNTER_ATTACK == True:
@@ -209,16 +213,6 @@ class Player():
         self.life -= 1
         return self.life <= 0
 
-    # def landing(self):
-    #     for (x,y) in ST1_PLATFORM_LIST:
-    #         if self.pos_y > y+25 and self.pos_y <y+32 and self.pos_x >x-48 and self.pos_x < x+48 and self.vel_y<0:
-    #             self.land_y = y
-    #             print(x,y)
-    #             return True
-    #         else:
-    #             return False
-    #def shield(self):
-
     def jump(self):
         if self.jump_count == 2:
             self.jump_count = 0
@@ -266,11 +260,11 @@ class Player():
             self.shieldon = False
         if e.type == SDL_MOUSEMOTION:
             self.target = (e.x ,get_canvas_height() - e.y - 1)
-        if platform.POTALON == True:
+        if platforms.POTALON == True:
             if e.type == SDL_KEYDOWN:
                 if e.key == SDLK_w:
                     game_state.updateMap()
-                    platform.POTALON = False
+                    platforms.POTALON = False
 
     def fire_bullet(self,bullet_type):
         global p

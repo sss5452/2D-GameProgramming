@@ -5,7 +5,6 @@ from pico2d import *
 
 objects = []
 trashcan = []
-
 def init(layer_names):
     global objects
     objects = []
