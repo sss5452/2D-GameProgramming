@@ -77,12 +77,13 @@ class Player():
         self.stage = ST1_PLATFORM_LIST
         self.shield_gauge = MAX_GAUGE
         self.life = MAX_LIFE
+        self.jump_count = 0
         global heart_red, heart_white,shield_bar,shield_gauge
-        heart_red = gfw.image.load('../res/heart_red.png')
-        heart_white = gfw.image.load('../res/heart_white.png')
+        heart_red = gfw.image.load('res/heart_red.png')
+        heart_white = gfw.image.load('res/heart_white.png')
         global shield_bar, shield_gauge
-        shield_bar = gfw.image.load('../res/shield_bar.png')
-        shield_gauge = gfw.image.load('../res/shield_gauge.png')
+        shield_bar = gfw.image.load('res/shield_bar.png')
+        shield_gauge = gfw.image.load('res/shield_gauge.png')
 
         # set Animation
         Player.image[State.Idle.name] = gfw.image.load(gobj.res('/frog_idle.png'))
@@ -119,6 +120,8 @@ class Player():
         shield_bar.draw(1100, 720)
         shield_gauge.composite_draw(0, 'h', 1150 - (self.shield_gauge/2), 720, self.shield_gauge, 16)
     def update(self):
+        if self.landon:
+            self.jump_count = 0
         if bullet.GET_COUNTER_ATTACK == True:
             bullet.GET_COUNTER_ATTACK = self.attack_count()
 
@@ -134,6 +137,11 @@ class Player():
         dx, dy = self.delta
         self.acc_y=  -PLAYER_GRAVITY
         self.acc_x = dx
+
+        self.vel_y += self.acc_y
+        self.pos_y += self.vel_y + self.acc_y * gfw.delta_time
+
+
         global layer_p
         if self.vel_y <0:
             layer_p = list(gfw.world.objects_at(gfw.layer.plat))
@@ -143,34 +151,20 @@ class Player():
                     self.acc_y = 0
                     self.landon = True
                     x, y = self.plat.pos
-                    self.pos_y = y +36
+                    self.pos_y = y +26
                     if self.acc_x != 0:
                         self.state = State.Move
                     else:
                         self.state = State.Idle
-
-        # for (x,y) in self.stage:
-        #     if self.pos_y > y+25 and self.pos_y <y+32 and self.pos_x >x-48 and self.pos_x < x+48 and self.vel_y<0:
-        #         self.land_y = y
-        #         self.pos_y = self.land_y+36
-        #         self.acc_y = 0
-        #         self.landon = True
-        #         if self.acc_x != 0:
-        #             self.state = State.Move
-        #         else:
-        #             self.state = State.Idle
-
-        #if gobj.collides_box(self, self.back):
 
         if self.pos_y > 70 and self.landon == False:
             if self.vel_y < 0:
                 self.state = State.Fall
             if self.pos_y < 75:
                 self.state = State.Idle
-
         elif self.pos_y < 70:  # 땅
-            self.pos_y = 75
             self.acc_y =0
+            self.pos_y = 68
             self.landon = True
         if self.acc_x < 0:
             self.fl = 'h'
@@ -183,9 +177,8 @@ class Player():
 
         self.acc_x += self.vel_x * PLAYER_FRICTION
         self.vel_x += self.acc_x
-        self.vel_y += self.acc_y
         self.pos_x += self.vel_x +  self.acc_x * gfw.delta_time
-        self.pos_y += self.vel_y + self.acc_y * gfw.delta_time
+
         self.pos = self.pos_x ,self.pos_y
 
     #새위치 = 이전위치 + 속도 * 시간(프레임타임)
@@ -227,8 +220,12 @@ class Player():
     #def shield(self):
 
     def jump(self):
-        self.vel_y = 10.5
-        self.landon = False
+        if self.jump_count == 2:
+            self.jump_count = 0
+        else:
+            self.jump_count +=1
+            self.vel_y = 10.5
+            self.landon = False
          #self.vel.x = 20
 
     def updateDelta(self, ddx, ddy):

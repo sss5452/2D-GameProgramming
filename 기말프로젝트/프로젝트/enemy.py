@@ -23,11 +23,11 @@ class Enemy:
         self.mass = 18
         self.velY = 0
         self.accY = 0
-        self.plant = gfw.image.load('../res/plant_idle.png')
-        self.tree = gfw.image.load('../res/tree_idle.png')
+        self.plant = gfw.image.load('res/plant_idle.png')
+        self.tree = gfw.image.load('res/tree_idle.png')
 
-        self.bomb_pig = gfw.image.load('../res/bomb_pig_idle.png')
-        self.bomb_pig_attack = gfw.image.load('../res/bomb_pig_attack.png')
+        self.bomb_pig = gfw.image.load('res/bomb_pig_idle.png')
+        self.bomb_pig_attack = gfw.image.load('res/bomb_pig_attack.png')
 
         self.fl = random.choice(['h','w'])
         self.fidx = random.randint(0, 7)

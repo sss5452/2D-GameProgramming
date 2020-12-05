@@ -15,7 +15,7 @@ class Entry:
 
 def load():
     global font, image
-    font = gfw.font.load('../res/Pixel.ttf', 30)
+    font = gfw.font.load('res/Pixel.ttf', 30)
 
     global scores
     try:

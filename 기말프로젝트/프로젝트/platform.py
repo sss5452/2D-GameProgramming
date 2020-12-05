@@ -8,8 +8,8 @@ class Platform:
     def __init__(self,count, x, y):
         layer = list(gfw.world.objects_at(gfw.layer.player))
         self.target = layer[0]
-        self.wall = load_image('../res/block_grass.png')
-        self.potal = load_image('../res/potal_c.png')
+        self.wall = load_image('res/block_grass.png')
+        self.potal = load_image('res/potal_c.png')
         self.stage = count
         self.pos = x,y
         self.map = False
@@ -41,7 +41,7 @@ class Platform:
 
 class Grass:
     def __init__(self):
-        self.image = load_image('../res/grass_ground.png')
+        self.image = load_image('res/grass_ground.png')
         self.pos = 600,20
     def draw(self):
         self.image.draw(*self.pos)

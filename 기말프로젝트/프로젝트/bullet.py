@@ -19,9 +19,9 @@ class Player_bullet:
         back = list(gfw.world.objects_at(gfw.layer.grass))
         self.back = back[0]
 
-        self.plant = gfw.image.load('../res/plant_bullet.png')
-        self.tree = gfw.image.load('../res/tree_bullet.png')
-        self.bomb_pig = gfw.image.load('../res/bomb.png')
+        self.plant = gfw.image.load('res/plant_bullet.png')
+        self.tree = gfw.image.load('res/tree_bullet.png')
+        self.bomb_pig = gfw.image.load('res/bomb.png')
         layer = list(gfw.world.objects_at(gfw.layer.player))
         self.type = type
         self.fl = dir
@@ -130,12 +130,12 @@ class Enemy_bullet:
         self.type = type
         self.pos = pos
         self.fl = dir
-        self.plant = gfw.image.load('../res/plant_bullet.png')
-        self.tree = gfw.image.load('../res/tree_bullet.png')
-        self.bomb_pig = gfw.image.load('../res/bomb.png')
+        self.plant = gfw.image.load('res/plant_bullet.png')
+        self.tree = gfw.image.load('res/tree_bullet.png')
+        self.bomb_pig = gfw.image.load('res/bomb.png')
         x, y = self.target.pos
         a, b = self.pos
-        self.delta = x-a, y-b
+        self.delta = x - a, y - b
         self.bomdelta = x-a + random.randint(-10,10),8
         self.mouse_target = 0,0
         self.sx =0
@@ -176,7 +176,8 @@ class Enemy_bullet:
 
     def draw(self):
         if self.type == 1:
-            self.plant.draw(*self.pos)
+            if self:
+                self.plant.draw(*self.pos)
         if self.type == 2:
             #self.tree.draw(*self.pos)
             self.rad +=0.2
@@ -184,7 +185,8 @@ class Enemy_bullet:
         if self.type == 3:
             self.sx += 52
             self.rad += 0.2
-            self.bomb_pig.clip_composite_draw(self.sx, 0, 52, 56, self.rad, self.fl, *self.pos, 104, 112)
+            if self:
+                self.bomb_pig.clip_composite_draw(self.sx, 0, 52, 56, self.rad, self.fl, *self.pos, 104, 112)
             if self.sx == 156: self.sx =0
 
     def get_bb(self):

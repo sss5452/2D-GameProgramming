@@ -10,15 +10,21 @@ import highscore
 import random
 
 score = 0
+Soundon = False
 
+def deadmusicstop():
+    global wav_die , Soundon
+    del wav_die
+    Soundon = False
 def endGame():
     global music_bg, gameover, score
     gameover = True
     music_bg.stop()
+
     return True
 
 def sound_wav(type):
-    global wav_attack ,wav_bomb, wav_shield_sound, wav_bullet, wav_hit, wav_die, hit
+    global wav_attack ,wav_bomb, wav_shield_sound, wav_bullet, wav_hit , hit , wav_die , Soundon
     if type == 1:
         wav_attack.play()
     elif type == 2:
@@ -32,7 +38,7 @@ def sound_wav(type):
         wav_shield_sound.play()
     elif type == 6:
         wav_die.play()
-
+    Soundon = True
 def enter():
     #--------------------------------------------------------------------------#
     gfw.world.init(['bg', 'plat', 'grass', 'obj_dead', 'en', 'player', 'b', 'p', 'ui']) #월드 init
@@ -59,24 +65,25 @@ def enter():
         en = enemy.Enemy((x, 800), 3)
         gfw.world.add(gfw.layer.en, en)
     #--------------------------------------------------------------------------#
-    global gameover_img,gameover
+    global gameover_img,gameover,entershow
     gameover = False
-    gameover_img = gfw.image.load('../res/gameover.png')
+    gameover_img = gfw.image.load('res/gameover.png')
+    entershow = load_image('res/enter2.png')
     #--------------------------------------------------------------------------#
     global music_bg,wav_attack ,wav_bomb, wav_shield_sound, wav_bullet, wav_hit1, wav_hit2, wav_hit3 ,wav_die, hit
-    wav_attack = load_wav('../res/shoot.ogg')
-    wav_bomb = load_wav('../res/bomb.wav')
-    wav_bullet = load_wav('../res/bullet.ogg')
-    wav_hit1 = load_wav('../res/pain1.wav')
-    wav_hit2 = load_wav('../res/pain2.wav')
-    wav_hit3 = load_wav('../res/pain3.wav')
+    wav_attack = load_wav('res/shoot.ogg')
+    wav_bomb = load_wav('res/bomb.wav')
+    wav_bullet = load_wav('res/bullet.ogg')
+    wav_hit1 = load_wav('res/pain1.wav')
+    wav_hit2 = load_wav('res/pain2.wav')
+    wav_hit3 = load_wav('res/pain3.wav')
     hit = [wav_hit1,wav_hit2,wav_hit3]
-    wav_die = load_wav('../res/die.wav')
-    wav_shield_sound = load_wav('../res/shield_sound.wav')
-    music_bg = load_music('../res/map.wav')
+    wav_die = load_wav('res/die.wav')
+    wav_shield_sound = load_wav('res/shield_sound.wav')
+    music_bg = load_music('res/map.wav')
     #--------------------------------------------------------------------------#
     global font ,score , score_pos
-    font = gfw.font.load('../res/Pixel.ttf',38)
+    font = gfw.font.load('res/Pixel.ttf',38)
     score = 0
     score_pos = 30 , get_canvas_height() - 30
     #--------------------------------------------------------------------------#
@@ -112,13 +119,14 @@ def update():
         return
     gfw.world.update()
 def draw():
-    global shield_bar , shield_gauge, gameover_img ,font, score ,score_pos
+    global shield_bar , shield_gauge, gameover_img ,font, score ,score_pos,entershow
     bg.draw()
     gfw.world.draw()
     font.draw(*score_pos, 'SCORE: %.0F' % score, (255, 255, 255))
     if gameover:
         center = get_canvas_width() // 2, get_canvas_height() * 2 // 3
         gameover_img.draw(*center)
+        entershow.draw(get_canvas_width() // 2,get_canvas_height() //2)
     #gobj.draw_collision_box()
 
 def handle_event(e):
@@ -130,6 +138,7 @@ def handle_event(e):
         if e.key == SDLK_ESCAPE:
             gfw.pop()
         if e.key == SDLK_RETURN and gameover:
+            gfw.world.clear()
             gfw.push(ranking_state)
     player.handle_event(e)
     #Boy.handle_event(boy, e)

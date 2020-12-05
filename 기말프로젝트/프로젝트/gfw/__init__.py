@@ -7,17 +7,20 @@ import gfw.image
 import gfw.font
 
 running = True
+runningFinish = 0
+isClearCanvas = False
 stack = None
 frame_interval = 0.01
 delta_time = 0
 
 def quit():
-    global running
-    running = False
+    global runningFinish
+    runningFinish = -1
 
 def run(start_state):
-    global running, stack
+    global running,runningFinish,isClearCanvas, stack
     running = True
+    runningFinish = 0
     stack = [start_state]
 
     w,h = 1200,800
@@ -31,6 +34,8 @@ def run(start_state):
     global delta_time
     last_time = time.time()
     while running:
+        runningFinish = 0
+
         # inter-frame (delta) time
         now = time.time()
         delta_time = now - last_time
@@ -39,23 +44,34 @@ def run(start_state):
         # event handling
         evts = get_events()
         for e in evts:
-            stack[-1].handle_event(e)
+            if stack[-1]:
+                stack[-1].handle_event(e)
 
         # game logic
-        stack[-1].update()
+        if stack[-1]:
+            stack[-1].update()
 
         # game rendering
+        isClearCanvas = False
         clear_canvas()
-        stack[-1].draw()
+        isClearCanvas = True
+        if stack[-1]:
+            stack[-1].draw()
         update_canvas()
 
         delay(frame_interval)
 
+        if runningFinish == -1:
+            running = False
+        runningFinish = 1
+
     while (len(stack) > 0):
-        stack[-1].exit()
+        if stack[-1]:
+            stack[-1].exit()
         stack.pop()
 
-    close_canvas()
+    if isClearCanvas:
+        close_canvas()
 
 def change(state):
     global stack
@@ -67,7 +83,8 @@ def change(state):
 def push(state):
     global stack
     if (len(stack) > 0):
-        stack[-1].pause()
+        if stack[-1]:
+            stack[-1].pause()
     stack.append(state)
     state.enter()
 
@@ -78,12 +95,14 @@ def pop():
         quit()
     elif size > 1:
         # execute the current state's exit function
-        stack[-1].exit()
+        if stack[-1]:
+            stack[-1].exit()
         # remove the current state
         stack.pop()
 
         # execute resume function of the previous state
-        stack[-1].resume()
+        if stack[-1]:
+            stack[-1].resume()
 
 def run_main():
     import sys

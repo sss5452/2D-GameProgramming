@@ -3,7 +3,7 @@ from pico2d import *
 import gfw
 import setting
 
-RES_DIR = '../res'
+RES_DIR = 'res'
 
 
 def res(file):
