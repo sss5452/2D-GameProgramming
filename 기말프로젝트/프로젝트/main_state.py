@@ -51,7 +51,6 @@ def draw():
     start.composite_draw(start_rad,'m',612,400)
     rank.composite_draw(start_rad, 'm',612,330)
     quit_game.composite_draw(start_rad, 'm', 612, 260)
-
     sx = fidx * 32
     player.clip_draw(sx,0,32,32,300+player_x,64)
     target.draw(*target_pos)
@@ -97,3 +96,4 @@ def resume():
     
 if __name__ == '__main__':
     gfw.run_main()
+    print("MAA")

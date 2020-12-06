@@ -6,6 +6,7 @@ import highscore
 
 start_rad = 0
 rad_bool = True
+
 def enter():
     print("RankingState Enter")
     global ButtonSound , BackSound
@@ -16,7 +17,6 @@ def enter():
 
     if main_state.CheckGame: highscore.add(game_state.score)
 
-    #gfw.world.add(gfw.layer.ui,highscore)
     back = gfw.load_image('res/background.png')
     ranking_back = gfw.load_image('res/rk.png')
     target = load_image('res/target.png')
@@ -36,8 +36,9 @@ def update():
         rad_bool = False
     if start_rad == -0.02:
         rad_bool = True
+
 def draw():
-    global ranking_back ,back , gotomain ,quit_game
+    global ranking_back, back, gotomain ,quit_game
     back.draw(get_canvas_width()//2,get_canvas_height()//2)
     ranking_back.draw(get_canvas_width()//2,get_canvas_height()//2)
     highscore.draw()
@@ -57,9 +58,9 @@ def handle_event(e):
     if e.type == SDL_MOUSEMOTION:
         target_pos = (e.x ,get_canvas_height() - e.y - 1)
         x, y = target_pos
-        if x > 1000 - gotomain.w//2 and x< 1000+gotomain.w//2 and y >150 - gotomain.h//2 and y<150+gotomain.h//2:
+        if x > 1000 - gotomain.w // 2 and x < 1000 + gotomain.w // 2 and y > 150 - gotomain.h // 2 and y < 150 + gotomain.h // 2:
             ButtonSound.play()
-        elif x > 1000 - quit_game.w//2 and x< 1000+quit_game.w//2 and y >110 - quit_game.h//2 and y<110+quit_game.h//2:
+        elif x > 1000 - quit_game.w // 2 and x < 1000 + quit_game.w // 2 and y > 110 - quit_game.h // 2 and y < 110 + quit_game.h // 2:
             ButtonSound.play()
     if e.type == SDL_MOUSEBUTTONDOWN:
         x, y = target_pos
@@ -69,6 +70,7 @@ def handle_event(e):
             gfw.change(main_state)
         elif x > 1000 - quit_game.w//2 and x< 1000+quit_game.w//2 and y >110 - quit_game.h//2 and y<110+quit_game.h//2:
             gfw.quit()
+
 def exit():
     global ranking_back ,target ,back ,gotomain ,quit_game
     del ranking_back ,target ,back ,gotomain ,quit_game
@@ -77,11 +79,13 @@ def exit():
     del ButtonSound
     del BackSound
     print('RankingState Exit')
+
 def pause():
     pass
-
 
 def resume():
     pass
 
+if __name__ == '__main__':
+    gfw.run_main()
 

@@ -91,8 +91,18 @@ class Player_bullet:
     def Tree_bullet(self):
         x,y = self.pos
         dx,dy = self.delta
-        x += dx * gfw.delta_time
-        y += dy * gfw.delta_time
+        ddx = 0
+        ddy = 0
+        if dx >0:
+            ddx = abs(dx/dx) * 500
+        elif dx <0:
+            ddx = abs(dx / dx) * -500
+        if dy < 0:
+            ddy = abs(dy/dx) * -500
+        elif dy > 0:
+            ddy = abs(dy/dx) * 500
+        x += ddx * gfw.delta_time
+        y += ddy * gfw.delta_time
         self.pos = x,y
         return self.pos
 
@@ -211,8 +221,11 @@ class Enemy_bullet:
     def Tree_bullet(self):
         x,y = self.pos
         dx,dy = self.delta
-        x += dx * gfw.delta_time
-        y += dy * gfw.delta_time
+        if dx > 0:
+            ddx = 500
+        else:
+            ddx = -500
+        x += ddx * gfw.delta_time
         self.pos = x,y
         return self.pos
 

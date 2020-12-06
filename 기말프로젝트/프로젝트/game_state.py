@@ -45,7 +45,7 @@ def enter():
     print("GameState Enter")
 
     #--------------------------------------------------------------------------#
-    gfw.world.init(['plat', 'grass', 'obj_dead', 'en', 'player', 'b', 'p', 'ui']) #월드 init
+    gfw.world.init(['plat','potal','grass', 'obj_dead', 'en', 'player', 'b', 'p', 'ui']) #월드 init
     global grass, player, platform, bg, count, en, plat, obj_dead ,bg_last
     bg = gfw.load_image('res/background_grass.png')
     bg_last = gfw.load_image('res/background_wall.png')
@@ -54,6 +54,7 @@ def enter():
     player = Player()
     gfw.world.add(gfw.layer.player, player)
     count = 0
+
     for (x, y) in STAGE_LIST[count]:
         plat = platforms.Platform(count, x, y)
         gfw.world.add(gfw.layer.plat, plat)
@@ -88,14 +89,17 @@ def enter():
     music_bg = load_music('res/map.wav')
     #--------------------------------------------------------------------------#
     global font_a ,score
-    font_a = gfw.font.load('res/Pixel.ttf',38)
+    font_a = gfw.font.load('res/Pixel.ttf', 38)
     score = 0
     #--------------------------------------------------------------------------#
     highscore.load()
     music_bg.repeat_play()
 
 def updateMap():
-    global count ,plat
+    global count ,plat ,potal
+    if count == 4:
+        endGame()
+    gfw.world.clear_at(gfw.layer.potal)
     count += 1
     gfw.world.clear_at(gfw.layer.plat)
     for (x, y) in STAGE_LIST[count]:
@@ -112,7 +116,6 @@ def updateMap():
     for x in BOMB_MONSTER_LIST[count]:
         en = enemy.Enemy((x,1000),3)
         gfw.world.add(gfw.layer.en, en)
-
 def updateScore():
     global score
     score +=150
@@ -123,14 +126,15 @@ def update():
         return
     gfw.world.update()
 def draw():
-    global shield_bar , shield_gauge, gameover_img ,font_a, score ,score_pos,entershow ,bg, bg_last
-    if count ==4:
+    global shield_bar , shield_gauge, gameover_img ,font_a, score ,entershow ,bg, bg_last
+    if count == 4:
         bg_last.draw(600,400)
     else:
         bg.draw(600,400)
     gfw.world.draw()
-    score_pos = 30 , get_canvas_height() - 30
-    font_a.draw(*score_pos, 'SCORE: %.0F' % score, (255, 255, 255))
+
+    font_a.draw(30 , get_canvas_height() - 30, 'SCORE: %.0F' % score, (255, 255, 255))
+
     if gameover:
         center = get_canvas_width() // 2, get_canvas_height() * 2 // 3
         gameover_img.draw(*center)
@@ -176,3 +180,5 @@ def resume():
     pass
 
 
+if __name__ == '__main__':
+    gfw.run_main()

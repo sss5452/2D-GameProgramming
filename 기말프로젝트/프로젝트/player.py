@@ -126,6 +126,7 @@ class Player():
             self.pos_x = 5
         if self.landon:
             self.jump_count = 0
+            self.acc_y = 0
         if bullet.GET_COUNTER_ATTACK == True:
             bullet.GET_COUNTER_ATTACK = self.attack_count()
 
@@ -260,11 +261,12 @@ class Player():
             self.shieldon = False
         if e.type == SDL_MOUSEMOTION:
             self.target = (e.x ,get_canvas_height() - e.y - 1)
-        if platforms.POTALON == True:
+        if platforms.POTALON  and platforms.POTAL_TO_NEXT:
             if e.type == SDL_KEYDOWN:
                 if e.key == SDLK_w:
                     game_state.updateMap()
                     platforms.POTALON = False
+                    platforms.POTAL_TO_NEXT = False
 
     def fire_bullet(self,bullet_type):
         global p
