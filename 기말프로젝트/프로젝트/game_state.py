@@ -43,7 +43,9 @@ def sound_wav(type):
 
 def enter():
     print("GameState Enter")
-
+    global target,target_pos
+    target_pos = 0,0
+    target = gfw.load_image('res/target.png')
     #--------------------------------------------------------------------------#
     gfw.world.init(['plat','potal','grass', 'obj_dead', 'en', 'player', 'b', 'p', 'ui']) #월드 init
     global grass, player, platform, bg, count, en, plat, obj_dead ,bg_last
@@ -53,9 +55,9 @@ def enter():
     gfw.world.add(gfw.layer.grass, grass)
     player = Player()
     gfw.world.add(gfw.layer.player, player)
-    count = 0
+    count = 4
 
-    for (x, y) in STAGE_LIST[count]:
+    for x, y in STAGE_LIST[count]:
         plat = platforms.Platform(count, x, y)
         gfw.world.add(gfw.layer.plat, plat)
 
@@ -89,7 +91,8 @@ def enter():
     music_bg = load_music('res/map.wav')
     #--------------------------------------------------------------------------#
     global font_a ,score
-    font_a = gfw.font.load('res/Pixel.ttf', 38)
+    #font_a = load_font('res/Pixel.ttf', 38)
+    font_a = load_font('res/Pixel.ttf', 38)
     score = 0
     #--------------------------------------------------------------------------#
     highscore.load()
@@ -102,7 +105,7 @@ def updateMap():
     gfw.world.clear_at(gfw.layer.potal)
     count += 1
     gfw.world.clear_at(gfw.layer.plat)
-    for (x, y) in STAGE_LIST[count]:
+    for x, y in STAGE_LIST[count]:
         plat = platforms.Platform(count, x, y)
         gfw.world.add(gfw.layer.plat, plat)
     for x in PLNAT_MONSTER_LIST[count]:
@@ -125,6 +128,7 @@ def update():
     if gameover:
         return
     gfw.world.update()
+
 def draw():
     global shield_bar , shield_gauge, gameover_img ,font_a, score ,entershow ,bg, bg_last
     if count == 4:
@@ -133,13 +137,14 @@ def draw():
         bg.draw(600,400)
     gfw.world.draw()
 
-    font_a.draw(30 , get_canvas_height() - 30, 'SCORE: %.0F' % score, (255, 255, 255))
+    font_a.draw(30 , get_canvas_height() - 30, 'SCORE: %.d' % score)
 
     if gameover:
         center = get_canvas_width() // 2, get_canvas_height() * 2 // 3
         gameover_img.draw(*center)
         entershow.draw(get_canvas_width() // 2,get_canvas_height() //2)
-    #gobj.draw_collision_box()
+    global target, target_pos
+    target.draw(*target_pos)
 
 def handle_event(e):
     global player, stage
@@ -152,6 +157,9 @@ def handle_event(e):
         if e.key == SDLK_RETURN and gameover:
             gfw.world.clear()
             gfw.change(ranking_state)
+    if e.type == SDL_MOUSEMOTION:
+        global target_pos
+        target_pos = (e.x ,get_canvas_height() - e.y - 1)
     player.handle_event(e)
     #Boy.handle_event(boy, e)
 

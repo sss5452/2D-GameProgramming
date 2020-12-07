@@ -7,9 +7,9 @@ POTALON = False
 POTAL_TO_NEXT = False
 class Platform:
     def __init__(self,count, x, y):
-        self.wall = load_image('res/block_grass.png')
-        self.wall_last = load_image('res/block_wall.png')
-        self.potal = load_image('res/potal_c.png')
+        self.wall = gfw.image.load('res/block_grass.png')
+        self.wall_last = gfw.image.load('res/block_wall.png')
+        self.potal = gfw.image.load('res/potal_c.png')
         self.stage = count
         self.pos = x,y
         self.potal_pos = get_canvas_width()//2,80
@@ -56,8 +56,8 @@ class Potal:
 
 class Grass:
     def __init__(self):
-        self.image = load_image('res/grass_ground.png')
-        self.image_last = load_image('res/wallground.png')
+        self.image = gfw.image.load('res/grass_ground.png')
+        self.image_last = gfw.image.load('res/wallground.png')
         self.pos = 600,20
         self.rad = 0
     def draw(self):

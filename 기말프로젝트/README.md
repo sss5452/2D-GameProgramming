@@ -129,3 +129,58 @@
  `class 구성정보 및 주요 코드`
 ![클래스 구성 정보 및 주요 코드](https://user-images.githubusercontent.com/71081825/99965389-24e36400-2dd8-11eb-804f-233bedcde2b4.PNG)
 
+
+
+최종 프로젝트 발표
+
+A , D 버튼을 이용한 플레이어 좌우 이동
+
+SPACEBAR 버튼을 이용한 플레이어 점프 구현 - 2회 (더블점프) 가능
+
+LSHIFT 버튼을 이용한 쉴드 생성 - 몬스터 공격 방어
+
+-쉴드 게이지 존재 쉴드 미사용시 게이지 충전, 사용시 소진
+
+MOUSEBUTTON_DOWN 이벤트를 이용한 플레이어의 공격
+
+ -쉴드로 공격 방어 한뒤 1초가 지나기 전에 마우스 클릭시 마우스 좌표로 공격 (반격)
+
+몬스터
+
+-PLANT  플레이어 좌표로 공격, 가까울수록 느리게 멀수록 빠른 공격을 한다 
+
+-TREE   플레이어 좌표로 공격, 균일한 속도로 공격을한다.
+
+-PIG_BOMB  플레이어 좌표로 공격, 포물선 운동을하며 플레이어 근처에 떨어진다 (3STAGE부터 출현)
+
+* 주차별 진척도![최종 주차 별 진척도](https://user-images.githubusercontent.com/71081825/101364645-2471bf80-38e6-11eb-8e6f-b13b43a1c3e1.PNG)
+
+* 깃 커밋 최종![최종 깃](https://user-images.githubusercontent.com/71081825/101364692-318eae80-38e6-11eb-9c03-1a63b3037ec0.PNG)
+
+* 로고 화면![로고화면](https://user-images.githubusercontent.com/71081825/101364390-dceb3380-38e5-11eb-9796-1447b18295b0.png)
+
+* 메인 화면![메인화면](https://user-images.githubusercontent.com/71081825/101364396-deb4f700-38e5-11eb-908d-0b7125040055.png)
+
+* 플레이 화면![플레이화면1](https://user-images.githubusercontent.com/71081825/101364408-e1175100-38e5-11eb-95bb-ff8ac3f49024.png)
+
+  ![플레이화면2](https://user-images.githubusercontent.com/71081825/101364409-e2487e00-38e5-11eb-81f9-1d5a53d47243.PNG)
+
+* 랭킹화면![랭킹화면](https://user-images.githubusercontent.com/71081825/101364586-1623a380-38e6-11eb-9547-25ebbf93be75.png)
+
+발표 영상 링크 및 Setup 파일링크
+
+1차 발표
+
+https://www.youtube.com/watch?v=LldBgOkUuaM
+
+2차 발표
+
+https://www.youtube.com/watch?v=2q2LX_ZLDHo
+
+최종 발표
+
+https://www.youtube.com/watch?v=Ec0mj2oeljs
+
+Setup.exe
+
+https://drive.google.com/file/d/1Ca_V4nruqQFfnkzlrT8c1ZTAX54RJERB/view?usp=sharing

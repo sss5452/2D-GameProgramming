@@ -76,8 +76,8 @@ def exit():
     del ranking_back ,target ,back ,gotomain ,quit_game
 
     global ButtonSound, BackSound
-    del ButtonSound
-    del BackSound
+    del(ButtonSound)
+    del(BackSound)
     print('RankingState Exit')
 
 def pause():

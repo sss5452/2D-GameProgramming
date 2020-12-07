@@ -56,7 +56,6 @@ class Player():
         self.pos_y =200
         self.attack_pos =(0,0)
         self.time = 0
-        self.target = None
         self.action = 3
         self.delta = 0, 0
         self.fidx = random.randint(0, 7)
@@ -91,8 +90,7 @@ class Player():
         Player.image[State.Jump.name] = gfw.image.load(gobj.res('/frog_jump.png'))
         Player.image[State.Fall.name] = gfw.image.load(gobj.res('/frog_fall.png'))
         Player.image[State.Attack.name] = gfw.image.load(gobj.res('/frog_attack.png'))
-        Player.shield_image = gfw.image.load(gobj.res('/s225.png'))
-        Player.target_image = gfw.image.load(gobj.res('/target.png'))
+        self.shield_image = gfw.image.load(gobj.res('/s225.png'))
     #구현해야할것
     # 총알 구별
     def draw(self):
@@ -102,8 +100,6 @@ class Player():
         elif self.state == State.Attack:
             sx = 64
         self.image[self.state.name].clip_composite_draw(sx, 0,32,32,0,self.fl, *self.pos,32,32)
-        if self.target is not None:
-           self.target_image.clip_draw(0, 0, 54, 54, *self.target, 35, 35)
         if self.shieldon == True:
             self.shield_image.clip_composite_draw(0, 0,225,225,self.shieldrad,self.fl, *self.pos,50,50)
             self.shieldrad +=0.2
@@ -250,7 +246,6 @@ class Player():
         elif e.type == SDL_MOUSEBUTTONDOWN:
             if bullet.GET_COUNTER_ATTACK == True:
                 self.state = State.Attack
-                self.attack_pos = (e.x, e.y)
                 global target ,time
                 target =(e.x ,get_canvas_height() - e.y - 1)
                 self.fire_bullet(bullet.GET_BULLET_TYPE)
@@ -259,8 +254,6 @@ class Player():
             #self.shield()
         elif pair == Player.KEYDOWN_SHIFTOFF:
             self.shieldon = False
-        if e.type == SDL_MOUSEMOTION:
-            self.target = (e.x ,get_canvas_height() - e.y - 1)
         if platforms.POTALON  and platforms.POTAL_TO_NEXT:
             if e.type == SDL_KEYDOWN:
                 if e.key == SDLK_w:
@@ -271,7 +264,8 @@ class Player():
     def fire_bullet(self,bullet_type):
         global p
         self.bullet_type = bullet_type
-        x, y = self.target
+        global target
+        x, y = target
         if self.pos_x > x:
             dir = 'w'
         else:

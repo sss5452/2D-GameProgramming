@@ -86,7 +86,7 @@ class Enemy:
     #def attack(self):
     def fire(self):
         if self.fire_count  == 100:
-            b = bullet.Enemy_bullet((self.pos),self.type,self.fl)
+            b = bullet.Enemy_bullet(self.pos,self.type,self.fl)
             gfw.world.add(gfw.layer.b,b)
             #self.Action_Change()
             self.fire_count = 0
